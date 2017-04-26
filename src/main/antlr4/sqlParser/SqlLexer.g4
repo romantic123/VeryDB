@@ -1,11 +1,12 @@
 grammar SqlLexer;
 
 
-create_statement: CREATE  TABLE FIRST_CHAR CURVES_LEFT (ident datatype COMMA?)+  CURVES_RIGHT SEMICOLON;
+create_statement: CREATE  TABLE FIRST_CHAR CURVES_LEFT  column_and_type CURVES_RIGHT SEMICOLON;
 insert_statement: INSERT INTO FIRST_CHAR VALUES CURVES_LEFT (ident COMMA?)+ CURVES_RIGHT SEMICOLON ;
 update_statement: UPDATE FIRST_CHAR SET ident EQUAL ident (WHERE ident EQUAL ident) SEMICOLON;
 delete_statement: DELETE FROM FIRST_CHAR WHERE ident EQUAL ident SEMICOLON;
 datatype: INT|FLOAT|DATE;
+column_and_type: (ident datatype COMMA?)+ ;
 
 
 CREATE: C R E A T E ;
