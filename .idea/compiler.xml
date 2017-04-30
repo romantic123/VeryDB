@@ -25,8 +25,8 @@
         <module name="VeryDb" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="VeryDb" target="1.6" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="VeryDb" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

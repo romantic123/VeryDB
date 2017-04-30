@@ -1,6 +1,14 @@
 grammar SqlLexer;
 
 
+
+
+stmt:
+     create_statement|
+     insert_statement|
+     update_statement|
+     delete_statement;
+
 create_statement: CREATE  TABLE FIRST_CHAR CURVES_LEFT  column_and_type CURVES_RIGHT SEMICOLON;
 insert_statement: INSERT INTO FIRST_CHAR VALUES CURVES_LEFT (ident COMMA?)+ CURVES_RIGHT SEMICOLON ;
 update_statement: UPDATE FIRST_CHAR SET ident EQUAL ident (WHERE ident EQUAL ident) SEMICOLON;
