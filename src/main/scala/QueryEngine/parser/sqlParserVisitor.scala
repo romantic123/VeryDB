@@ -18,13 +18,17 @@ class sqlParserVisitor extends sqlParser.SqlLexerBaseVisitor[AnyRef]{
   def getPlan(ctx:RuleContext):logicPlanTree=VisitChild(ctx)
 
 
-
+  /**
+    *
+    * @param ctx the parse tree
+    *   */
   override  def visitCreate_statement(ctx: SqlLexerParser.Create_statementContext) : logicPlanTree = {
     val tableName=ctx.FIRST_CHAR().getText
     val tableisExist=Catalog.lookUpTable(tableName)
     if (!tableisExist) throw new Exception ("table is exists!")
     val table=table_logic(tableName,None)
     val column=getPlan(ctx.column_and_type())
+    table.leaf=column
      table
   }
 
