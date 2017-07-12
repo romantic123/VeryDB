@@ -6,8 +6,8 @@ import StoreEngine.row.Row
 /**
   * Created by jianwei.yang on 2017/4/22.
   */
-abstract  class Table {
+abstract class Table {
        var tableName:String
-       val allRow:List[Row]
-       val allColumn:List[Column]
+       def allRow:List[Row]
+       var allColumn:Seq[Column]
 }

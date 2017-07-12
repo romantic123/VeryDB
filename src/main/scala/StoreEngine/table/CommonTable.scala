@@ -7,19 +7,29 @@ import StoreEngine.row.Row
   * Created by jianwei.yang on 2017/4/22.
   */
 class CommonTable extends  Table{
-  override var tableName: String = _
+   var tableName: String = _
   override val allRow: List[Row] = List[Row]()
-  override val allColumn: List[Column] = List[Column]()
+   var allColumn: Seq[Column] = Seq[Column]()
 
   def setTable(name:String){
     this.tableName=name
   }
 
   def addRow(row:Row): List[Row] ={
-    allRow:+(row)
+    this.allRow:+(row)
   }
 
+  def addColumn(column:Column)={
+    this.allColumn:+(column)
+  }
 
+  def setColumn(columnList:List[Column])= {
+    this.allColumn = columnList.toSeq
+  }
+
+  def getColumn(column:String):Column={
+    this.allColumn.filter(_.getColumnName().equalsIgnoreCase(column))(0)
+  }
 }
 
 object CommonTable {
