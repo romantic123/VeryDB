@@ -17,7 +17,7 @@ insert_statement : INSERT INTO FIRST_CHAR VALUES CURVES_LEFT (ident COMMA?)+ CUR
 update_statement : UPDATE FIRST_CHAR SET ident EQUAL ident (WHERE ident EQUAL ident) ;
 delete_statement : DELETE FROM FIRST_CHAR WHERE ident EQUAL ident ;
 select_statement : SELECT item_list FROM FIRST_CHAR filter_list?;
-datatype: INT|FLOAT|DATE;
+datatype: INT|FLOAT|DATE| (VARCHAR CURVES_LEFT ident CURVES_RIGHT);
 column_and_type: (ident datatype COMMA?)+ ;
 item_list: (ident COMMA?)* | STAR;
 filter_list: WHERE ident (GREATER|EQUAL|LESS)  ident;
@@ -37,8 +37,10 @@ SELECT: S E L E C T;
 INT:  I N T;
 FLOAT: F L O A T;
 DATE: D A T E;
+VARCHAR: V A R C H A R;
 FIRST_NUMBER: DIGIT ([a-zA-Z]|DIGIT)*;
 FIRST_CHAR: [a-zA-Z]([a-zA-Z]|DIGIT)* ;//TODO
+NUMBER: DIGIT+;
 DIGIT: [0-9];
 EQUAL: '=';
 CURVES_LEFT: '(';

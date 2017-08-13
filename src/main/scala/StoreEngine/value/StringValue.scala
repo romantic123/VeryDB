@@ -5,16 +5,25 @@ package StoreEngine.value
   */
 class StringValue extends Value {
   var data: String = null
+  var size:Int=null
 
   def add(value: String): Value = {
-    val stringValue=value.asInstanceOf[StringValue]
-    stringValue
+      this.data=value
+      this
   }
 
    def get(): String = {
     data
   }
 
+
+  override def toString(): String ={
+    data.toString
+  }
+
+  def getBytes(): Array[Byte]={
+    data.getBytes
+  }
 }
 
 object StringValue {

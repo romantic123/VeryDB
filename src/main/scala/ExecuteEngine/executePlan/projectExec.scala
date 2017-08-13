@@ -17,13 +17,14 @@ case class projectExec(plan:select_logic,child:executePlanTree) extends executeP
 
   override  def execute(): Unit ={
     super.execute()      //让子树执行,执行完后将结果存在data里,然后坐等该节点调用
-    val data=next() //数据从子树来
-    data.map{x=>
-      println(x)
+    val data=child.next() //数据从子树来
+    data.toSeq.map{x=>
+      x.valueList.foreach{y=>
+        print(y.toString +" ")
+      }
     }
-
-
   }
 
 
 }
+

@@ -42,10 +42,15 @@ case class InsertExec(plan: insert_logic,child:executePlanTree) extends executeP
       case valueType if(valueType.equalsIgnoreCase("String"))=>{
         StringValue().add(valueList.next().toString)
       }
+      case valueType if(valueType.startsWith("varchar"))=>{
+        StringValue().size=valueType.substring(valueType.indexOf('('),valueType.indexOf(')')).toInt  //将varchar的size更新到Row的size属性中
+        StringValue().add(valueList.next().toString)
+      }
     }.toArray
 
     val row=Row(ValueSeq)
     table.addRow(row)
+    table
   }
 
 

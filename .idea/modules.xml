@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/VeryDb.iml" filepath="$PROJECT_DIR$/VeryDb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JwDb.iml" filepath="$PROJECT_DIR$/JwDb.iml" />
     </modules>
   </component>
 </project>
