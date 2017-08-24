@@ -7,37 +7,33 @@ import StoreEngine.value.Value
   * Created by jianwei.yang on 2017/6/5.
   */
 class Page{
-
+  //0是叶子节点,1是非叶子节点
   var pageType:Int=null
-  var parentId:Int=null
-  var tableId:Int=null
-  var pageLen:Int=null
+  var keysSize:Int=null
   var keys:Seq[Int]=null
   var values:Seq[Row]=null
   var childs:Seq[PageReference]=null
+
+  val everyPageSize=4096
 
 
   /**
     * 叶子节点上的page
     *
     * @param pageType
-    * @param parentId
-    * @param tableId
     * @param pageLen
     * @param keys
     */
 
-  def this(pageType:Int,parentId:Int,tableId:Int,pageLen:Int,keys:Seq[Int]){
+  def this(pageType:Int,pageLen:Int,keys:Seq[Int]){
     this()
     this.pageType=pageType
-    this.parentId=parentId
-    this.tableId=tableId
-    this.pageLen=pageLen
+    this.keysSize=pageLen
     this.keys=keys
   }
 
-  def this(pageType:Int,parentId:Int,tableId:Int,pageLen:Int,keys:Seq[Int],values:Seq[Row],childs:Seq[PageReference]){
-    this(pageType,parentId,tableId,pageLen,keys)
+  def this(pageType:Int,pageLen:Int,keys:Seq[Int],values:Seq[Row],childs:Seq[PageReference]){
+    this(pageType,pageLen,keys)
     this.values=values
     this.childs=childs
 
@@ -46,7 +42,6 @@ class Page{
 
   /**
     * 从某个节点search符合条件的key
-    *
     * @param searchKey
     * @return
     */

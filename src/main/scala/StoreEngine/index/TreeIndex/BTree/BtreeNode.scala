@@ -9,15 +9,12 @@ import StoreEngine.value.Value
   */
 
 class BtreeNode extends Btree {
-  var storePage: PageReference = _
-  var filePos:Int
+  var storePage: Page = _
 
 
-  def this(childs: Seq[Btree], storePage: PageReference,filePos:Int) {
+  def this(storePage: Page) {
     this()
-    this.childs = childs
     this.storePage = storePage
-    this.filePos=filePos
   }
 
 
@@ -81,6 +78,17 @@ class BtreeNode extends Btree {
   }
 
 
+  def searchInsertPage(row:Row):Int={
+    val gonnaInsertKey=row.key.get()
+    //当前节点的keys和values
+    val currentNodeKeys: Seq[Int] = storePage.keys
+    val currentNodeValues: Seq[PageReference] = storePage.childs
+    //待插入的key和index
+    val insertIndex = binary_serach(gonnaInsertKey, currentNodeKeys)
+    insertIndex
+  }
+
+
   /**
     * 分裂叶节点
     * @param node
@@ -112,11 +120,15 @@ class BtreeNode extends Btree {
     System.arraycopy(pageRefs, currentNodeLength, rightChildPageReference, 0, currentNodeLength)
 
     //右边的keys和values组成一个新的page,左边的keys和value还在原页中
-    val newPage = new Page(1, 1, 1, 1, rightKey, rightChildPageReference, null)
+    val newPage = new Page(1, 1,  rightKey, rightChildPageReference, null)
 
     //new出新的节点
-    val leaf = new BtreeNode(null, newPage,1)
+    val leaf = new BtreeNode(null, newPage)
     leaf
   }
 }
 
+object BtreeNode{
+  def apply()=new BtreeNode()
+  def apply(storePage: Page): BtreeNode = new BtreeNode(storePage: Page)
+}

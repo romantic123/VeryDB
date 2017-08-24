@@ -6,6 +6,11 @@ package StoreEngine.value
 class IntValue extends Value {
   var data: Int = 1
 
+  def this(i: Int) {
+    this()
+    this.data = i
+  }
+
   def add(value: Int): Value = {
     this.data = value
     this
@@ -25,13 +30,14 @@ class IntValue extends Value {
     Seqbyte = Seqbyte :+ (data >> 8 & 0xff).asInstanceOf[Byte];
     Seqbyte = Seqbyte :+ (data >> 16 & 0xff).asInstanceOf[Byte];
     Seqbyte = Seqbyte :+ (data >> 24 & 0xff).asInstanceOf[Byte];
-
     Seqbyte
   }
-
 }
 
 object IntValue {
   def apply() = new IntValue()
+
+  def apply(i: Int) = new IntValue(i)
+
 
 }

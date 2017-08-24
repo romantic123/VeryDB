@@ -1,11 +1,12 @@
 package ExecuteEngine.executePlan
 
 import QueryEngine.executePlan.executePlanTree
-import QueryEngine.logicPlan.{insert_logic, column_logic, table_logic}
+import QueryEngine.logicPlan.{column_logic, insert_logic, table_logic}
+import StoreEngine.SEngine
 import StoreEngine.column.Column
 import StoreEngine.row.Row
 import StoreEngine.table.CommonTable
-import StoreEngine.value.{Value, IntValue, StringValue}
+import StoreEngine.value.{IntValue, StringValue, Value}
 import common.Catalog
 
 /**
@@ -49,6 +50,7 @@ case class InsertExec(plan: insert_logic,child:executePlanTree) extends executeP
     }.toArray
 
     val row=Row(ValueSeq)
+    SEngine.storeFile(tableName,row)
     table.addRow(row)
     table
   }

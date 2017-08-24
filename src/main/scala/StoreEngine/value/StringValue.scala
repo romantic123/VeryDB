@@ -7,6 +7,12 @@ class StringValue extends Value {
   var data: String = null
   var size:Int=null
 
+  def this(str:String)={
+    this()
+    this.data=str
+    this.size=str.length
+  }
+
   def add(value: String): Value = {
       this.data=value
       this
@@ -28,4 +34,5 @@ class StringValue extends Value {
 
 object StringValue {
   def apply() = new StringValue()
+  def apply(str:String) =new StringValue(str)
 }
