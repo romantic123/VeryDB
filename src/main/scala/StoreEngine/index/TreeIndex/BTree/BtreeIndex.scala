@@ -2,6 +2,7 @@ package StoreEngine.index.TreeIndex.BTree
 
 import java.nio.ByteBuffer
 
+import StoreEngine.`type`.{IntType, StringType}
 import StoreEngine.fs.fileDisk
 import StoreEngine.index.page.{Page, PageReference, PageUtils}
 import StoreEngine.row.Row
@@ -13,11 +14,12 @@ import scala.collection.mutable.ArrayBuffer
 /**
   * Created by jianwei.yang on 2017/6/2.
   */
-class BtreeIndex extends Btree {
+class BtreeIndex  {
+
   val root: Page = null
   val keys: ArrayBuffer[Int] = null
   val values: ArrayBuffer[Value] = null
-  val childs: ArrayBuffer[Btree] = _
+  val childs: ArrayBuffer[Btree] = null
   val storePage = root
 
 
@@ -32,8 +34,8 @@ class BtreeIndex extends Btree {
     */
   def getRootNodeFilePos(tableName: String): Option[Int] = {
     Catalog.getRootNodeFilePos(tableName) match {
-      case pos => {
-        Some(pos.get)
+      case Some(pos) => {
+        Some(pos)
       }
       case None => {
         None
@@ -76,7 +78,7 @@ class BtreeIndex extends Btree {
     data1.putInt(row.key.get)
     DataUtils.writeRow(tableName, data2, row)
 
-    val keyAndValueSize = 4 + row.rowSize
+    val keyAndValueSize = 4 + Catalog.getRowSize(tableName)
     val number = 4096 / keyAndValueSize
 
     val valueStart = 4096 - 8 - number * 4 + startPos
@@ -89,24 +91,25 @@ class BtreeIndex extends Btree {
     fileDisk.write(valueStart, data2)
   }
 
-
-  def firstInsert():Unit={
-    val tableName_test:String=null
-    val row_test:Row=null
+  def insert(tableName:String,row: Row):Unit={
 
     val fileDisk = new fileDisk()
     val data = ByteBuffer.allocate(4096)
     var rootNodePage: Int = 0
-    getRootNodeFilePos(tableName_test) match {
+    getRootNodeFilePos(tableName) match {
+        //不是第一次插入
       case Some(rootPagePos) => {
         rootNodePage = rootPagePos
-      }
+        val rootPage=getPage(tableName,rootNodePage)
+        insert(tableName,row,rootPage)
+      }//第一次插入
       case None => {
-        write(tableName_test, fileDisk, row_test)
-        updateRootNodeFilePos(tableName_test, 0)
+        write(tableName, fileDisk, row)
+        updateRootNodeFilePos(tableName, 0)
       }
     }
-    insert(tableName_test,row_test,0)
+
+
   }
 
 
@@ -115,20 +118,19 @@ class BtreeIndex extends Btree {
     *2.判断page类型是node还是leaf
     *3.如果是node,判断child,向下走
     *4.如果是leaf,获取文件中存的值
+    **/
+  /**
     *
+    * @param tableName
     * @param row
+    * @param page
     */
-  def insert(tableName: String, row: Row, pagePos:Int): Unit = {
-
-//step1:取出pagePos位置的page
-    val page=getPage(tableName,pagePos)
+  def insert(tableName: String, row: Row, page:Page): Unit = {
 
 
-//step3:判断是不是叶子节点
-    if (page.pageType==0) {
-      //如果是叶子节点,将row插入到leaf的
-      val btreeLeaf:BtreeLeaf=BtreeLeaf(page)
-      btreeLeaf.insert(row)
+//step1:判断是不是叶子节点
+    if (page.pageType==1) {
+      //如果是叶子节点,就代表没有子节点了,则返回
       return
     } else {
       //如果不是叶子节点,获取到正确的pageRef,然后遍历该pageRef指向的page
@@ -136,7 +138,27 @@ class BtreeIndex extends Btree {
       val insertIndex=btreeNode.searchInsertPage(row)
       val childPageRef=btreeNode.storePage.childs(insertIndex)
       val childPos=childPageRef.pageId*4096+childPageRef.pos
-      insert(tableName,row,childPos)
+      val childPage=getPage(tableName,childPos)
+      //如果是叶子节点
+      if(childPage.pageType==0){
+        val btreeLeaf:BtreeLeaf=BtreeLeaf(childPage)
+        val newSplitPage:Option[Page]=btreeLeaf.insert(tableName,row)
+        newSplitPage match {
+          //有返回值,则代表需要分裂
+          case Some(newSplitPage) => {
+            //如果分裂,则返回分裂出的节点的key和pageRef
+            btreeNode.insert(newSplitPage.keys(0), newSplitPage.childs(0))
+          }
+          //无返回值,代表不需要分裂
+          case None => {
+            //如果不需要分裂,则代表插入成功
+            insert(tableName, row, childPage)
+          }
+        }
+        //如果不是叶子节点,就递归insert
+      }else if(childPage.pageType==1){
+        insert(tableName,row,childPage)
+      }
     }
   }
 
@@ -173,10 +195,10 @@ class BtreeIndex extends Btree {
         Catalog.getTableMapValueType(tableName) match {
           case Some(typeList) => {
             typeList.foreach {
-              case 1 => {
+              case valueType:IntType => {
                 values(i) = IntValue(data.getInt())
               }
-              case 2 => {
+              case valueType:StringType => {
                 values(i) = StringValue(DataUtils.readString(data))
               }
             }
@@ -210,14 +232,6 @@ class BtreeIndex extends Btree {
 
   }
 
-  override def isLeaf(node: Page): Boolean = {
-    true
-  }
-
-
-  override def update(): Unit = ???
-
-  override def remove(): Unit = ???
 
   /**
     * 获取到PageReference指定的page
