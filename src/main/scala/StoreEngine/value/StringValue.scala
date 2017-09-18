@@ -5,7 +5,8 @@ package StoreEngine.value
   */
 class StringValue extends Value {
   var data: String = null
-  var size:Int=null
+  var size:Int=0
+
 
   def this(str:String)={
     this()

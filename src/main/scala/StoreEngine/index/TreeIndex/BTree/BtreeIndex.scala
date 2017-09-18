@@ -129,7 +129,7 @@ class BtreeIndex  {
 
 
 //step1:判断是不是叶子节点
-    if (page.pageType==1) {
+    if (page.pageType==0) {
       //如果是叶子节点,就代表没有子节点了,则返回
       return
     } else {

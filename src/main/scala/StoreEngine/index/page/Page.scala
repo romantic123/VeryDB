@@ -8,8 +8,8 @@ import StoreEngine.value.Value
   */
 class Page{
   //0是叶子节点,1是非叶子节点
-  var pageType:Int=null
-  var keysSize:Int=null
+  var pageType:Int=0
+  var keysSize:Int=0
   var keys:Seq[Int]=null
   var values:Seq[Row]=null
   var childs:Seq[PageReference]=null

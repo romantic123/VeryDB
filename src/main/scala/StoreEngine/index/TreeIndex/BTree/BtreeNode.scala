@@ -22,8 +22,6 @@ class BtreeNode extends Btree {
 
   override def isLeaf(page: Page): Boolean = ???
 
-  override def split(): Unit = ???
-
   override def remove(): Unit = ???
 
   def binary_serach(serarchKey: Int, allKeys: Seq[Int]): Int = {
@@ -32,15 +30,14 @@ class BtreeNode extends Btree {
 
   /**
     * 该方法在分裂的时候被调用
-    * @param node
     * @param gonnaInsertKey
     * @param gonnaInsertPageRef                      
     * @return
     */
-  def insert(node: Btree, gonnaInsertKey:Int,gonnaInsertPageRef:PageReference): BtreeNode = {
+  def insert(gonnaInsertKey:Int,gonnaInsertPageRef:PageReference): Option[Page] = {
     //当前节点的keys和values
-    val currentNodeKeys: Seq[Int] = node.storePage.keys
-    val currentNodeValues: Seq[PageReference] = node.storePage.childs
+    val currentNodeKeys: Seq[Int] = storePage.keys
+    val currentNodeValues: Seq[PageReference] = storePage.childs
 
     //待插入的key和index
     val insertIndex = binary_serach(gonnaInsertKey, currentNodeKeys)
@@ -59,9 +56,11 @@ class BtreeNode extends Btree {
 
     //插入完之后,判断是否需要分裂
     if (getSize(newCurrentNodeKeys, newCurrentNodeValues) > Page.pageSize) {
-      val newLeaf: BtreeNode = splitNode(node)
+      val splitPage: Page = split()
+      //new出新的节点
+      return Some(splitPage)
     }
-    return this
+    return  None
 
   }
 
@@ -91,21 +90,19 @@ class BtreeNode extends Btree {
 
   /**
     * 分裂叶节点
-    * @param node
     */
-  def splitNode(node: Btree): BtreeNode = {
-    val currentNode = node.storePage
+  def split(): Page = {
 
     //确定切割点,默认中中间节点
-    val currentNodeLength = currentNode.keys.size / 2
+    val currentNodeLength = storePage.keys.size / 2
 
     //获取切割节点的key和value
-    val key = currentNode.keys(currentNodeLength)
-    val childPageRefs = currentNode.childs(currentNodeLength)
+    val key = storePage.keys(currentNodeLength)
+    val childPageRefs = storePage.childs(currentNodeLength)
 
     //该节点所有的key和value
-    val keys = currentNode.keys
-    val pageRefs = currentNode.childs
+    val keys = storePage.keys
+    val pageRefs = storePage.childs
 
     //从切割点切割,左边key和右边key分别放到两个临时数组,切割点的key放在右边数组中
     var leftKeys: Seq[Int] = null
@@ -122,10 +119,10 @@ class BtreeNode extends Btree {
     //右边的keys和values组成一个新的page,左边的keys和value还在原页中
     val newPage = new Page(1, 1,  rightKey, rightChildPageReference, null)
 
-    //new出新的节点
-    val leaf = new BtreeNode(null, newPage)
-    leaf
+    newPage
   }
+
+
 }
 
 object BtreeNode{

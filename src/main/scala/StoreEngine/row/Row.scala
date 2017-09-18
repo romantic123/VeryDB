@@ -1,6 +1,8 @@
 package StoreEngine.row
 
-import StoreEngine.value.{StringValue, IntValue, Value}
+import StoreEngine.`type`.{IntType, StringType}
+import StoreEngine.value.{IntValue, StringValue, Value}
+import common.Catalog
 
 /**
   * Created by jianwei.yang on 2017/4/22.
@@ -8,25 +10,8 @@ import StoreEngine.value.{StringValue, IntValue, Value}
 class Row {
   var key: IntValue = null             //Btree cluster index's key
   var valueList: Seq[Value] = null
-  var rowSize:Int=getRowSize
 
 
-  /**
-    * 计算一行数据的大小
-    */
-  def getRowSize(): Int ={
-    var size=0;
-    valueList.foreach{
-      case intValue if intValue.isInstanceOf[IntValue]=>{
-        size+=4
-      }
-      case stringValue if StringValue.isInstanceOf[StringValue]=>{
-        size+=stringValue.asInstanceOf[StringValue].size
-      }
-
-    }
-    size
-  }
 
 
 

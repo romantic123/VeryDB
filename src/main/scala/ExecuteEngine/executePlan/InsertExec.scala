@@ -3,10 +3,12 @@ package ExecuteEngine.executePlan
 import QueryEngine.executePlan.executePlanTree
 import QueryEngine.logicPlan.{column_logic, insert_logic, table_logic}
 import StoreEngine.SEngine
+import StoreEngine.`type`.{DataType, StringType}
 import StoreEngine.column.Column
 import StoreEngine.row.Row
 import StoreEngine.table.CommonTable
 import StoreEngine.value.{IntValue, StringValue, Value}
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.IntType
 import common.Catalog
 
 /**
@@ -32,19 +34,15 @@ case class InsertExec(plan: insert_logic,child:executePlanTree) extends executeP
       case None=> throw new Exception("表不存在")
       case Some(table) => table.asInstanceOf[CommonTable]
     }
-    val TypeList=plan.expectColumn(table).foldLeft(Seq[String]()){(a,b)=>
-       a :+ b.getDataType()
+    val TypeList=plan.expectColumn(table).foldLeft(Seq[DataType]()){ (a, b)=>
+       a :+ b.dataType
     }
     val valueList=plan.Value.toIterator
     val ValueSeq=TypeList.map{
-      case valueType if(valueType.equalsIgnoreCase("int"))=>{
+      case valueType:StoreEngine.`type`.IntType =>{
         IntValue().add(valueList.next().toInt)
       }
-      case valueType if(valueType.equalsIgnoreCase("String"))=>{
-        StringValue().add(valueList.next().toString)
-      }
-      case valueType if(valueType.startsWith("varchar"))=>{
-        StringValue().size=valueType.substring(valueType.indexOf('('),valueType.indexOf(')')).toInt  //将varchar的size更新到Row的size属性中
+      case valueType:StoreEngine.`type`.StringType=>{
         StringValue().add(valueList.next().toString)
       }
     }.toArray

@@ -12,7 +12,7 @@ class Column(val columnName:String,val dataType:DataType) {
              columnName
           }
 
-          def getDataType():Int={
+          def getDataType():DataType={
             dataType.getType()
           }
 

@@ -1,9 +1,11 @@
 package common
 
 import ExecuteEngine.executePlan.executeCommonUtils
-import StoreEngine.`type`.DataType
+import StoreEngine.`type`.{DataType, IntType, StringType}
 import StoreEngine.column.Column
 import StoreEngine.table.{CommonTable, Table}
+import StoreEngine.value.{IntValue, StringValue}
+
 import scala.collection.mutable._
 
 /**
@@ -22,13 +24,39 @@ object Catalog {
   //rootNodeFilePos中key是表名,value是Btree中root page的pos
   var rootNodeFilePos: Map[String, Int] = Map()
 
-  val tableMapValueType: Map[String, scala.collection.mutable.LinkedList[Int]] = Map()
+  val tableMapValueType: scala.collection.mutable.Map[String, scala.collection.mutable.ArrayBuffer[DataType]] = scala.collection.mutable.Map()
 
 
-  def getTableMapValueType(tableName: String): Option[LinkedList[Int]]= {
+  def getTableMapValueType(tableName: String): Option[ArrayBuffer[DataType]] = {
     tableMapValueType.get(tableName)
   }
 
+
+  /**
+    * 计算一行数据的大小
+    */
+  def getRowSize(tableName: String): Int = {
+
+    getTableMapValueType(tableName) match {
+      case Some(columnTypes) => {
+        var size = 0;
+        columnTypes.foreach {
+          case columnType: IntType => {
+            size += IntType().size
+          }
+          case columnType: StringType => {
+            size += StringType().size
+          }
+
+        }
+        size
+      }
+      case None =>{
+        throw  new Exception("此表不存在!")
+      }
+    }
+
+  }
 
 
   def getRootNodeFilePos(tableName: String): Option[Int] = {
@@ -39,13 +67,12 @@ object Catalog {
   }
 
 
-  def setRootNodeFilePos(tableName: String,filePos:Int) = {
+  def setRootNodeFilePos(tableName: String, filePos: Int) = {
     if (!lookUpTable(tableName)) {
       throw new Exception("表不存在")
     }
-    rootNodeFilePos+=(tableName->filePos)
+    rootNodeFilePos += (tableName -> filePos)
   }
-
 
 
   def getTable(tableName: String): Option[Table] = {
@@ -71,14 +98,16 @@ object Catalog {
     this.columnMap += (column.columnName -> column)
   }
 
-  def addTableMapValueType(tableName:String,column: Column)={
-    tableMapValueType.get(tableName) match{
-      case Some(typeList)=>{
-        val newTypeList=typeList:+column.getDataType()
-        tableMapValueType.update(tableName,newTypeList)
+  def addTableMapValueType(tableName: String, column: Column) = {
+    tableMapValueType.get(tableName) match {
+      case Some(typeList) => {
+        val newTypeList = typeList :+ column.getDataType()
+        tableMapValueType.update(tableName, newTypeList)
       }
-      case None=>{
-        throw new Exception("从元数据表中查找不到该表的元数据信息:行的数据类型")
+      case None => {
+        val newList:scala.collection.mutable.ArrayBuffer[DataType]=new scala.collection.mutable.ArrayBuffer()
+        newList+=column.getDataType()
+        tableMapValueType +=(tableName->newList)
       }
     }
     column.dataType.getType()

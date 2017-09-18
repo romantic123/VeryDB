@@ -23,6 +23,6 @@
     <orderEntry type="library" name="Maven: org.scala-lang:scala-library:2.11.8" level="project" />
     <orderEntry type="library" name="Maven: org.scala-lang:scala-actors:2.11.8" level="project" />
     <orderEntry type="library" name="Maven: org.scala-lang:scalap:2.11.8" level="project" />
-    <orderEntry type="library" name="scala-sdk-2.10.5" level="application" />
+    <orderEntry type="library" name="scala-sdk-2.11.8" level="application" />
   </component>
 </module>

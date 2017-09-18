@@ -1,6 +1,7 @@
 package QueryEngine.executePlan
 
-import QueryEngine.logicPlan.{column_logic, table_logic, logicPlanTree}
+import QueryEngine.logicPlan.{column_logic, logicPlanTree, table_logic}
+import StoreEngine.`type`.DataType
 import StoreEngine.column.Column
 import StoreEngine.row.Row
 import StoreEngine.table.CommonTable
@@ -9,7 +10,7 @@ import common.Catalog
 /**
   * Created by jianwei.yang on 2017/5/1.
   */
-case class ddlCommandExec(plan: table_logic,child:executePlanTree) extends executePlanTree {
+case class DdlCommandExec(plan: table_logic, child:executePlanTree) extends executePlanTree {
 
 
 
@@ -35,7 +36,7 @@ case class ddlCommandExec(plan: table_logic,child:executePlanTree) extends execu
     table.setTable(tableName)
 
     // 两个List拼成一个Column对象
-    def getcolumn (columnNameList: List[String], typeList: List[String]):List[Column] = {
+    def getcolumn (columnNameList: List[String], typeList: List[DataType]):List[Column] = {
       if (columnNameList.length != typeList.length) throw new Exception("column and type not match")
       val iter1 = columnNameList.toIterator
       val iter2 = typeList.toIterator
@@ -46,9 +47,13 @@ case class ddlCommandExec(plan: table_logic,child:executePlanTree) extends execu
       }
       columnList
     }
+
     val columnList: List[Column]=getcolumn(columnNameList, columnTypeList)
     // table对象构造完毕
     table.setColumn(columnList)
+    columnList.foreach{column=>
+      Catalog.addTableMapValueType(tableName,column)
+    }
     // 添加到全局的catalog中
     Catalog.addTableToMap(table)
   }

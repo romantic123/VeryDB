@@ -8,12 +8,9 @@ import StoreEngine.row.Row
   */
 abstract class Btree {
   var storePage:Page
-  //var childs:Seq[Btree]
-  var filePos:Int
-  def insert(node: Btree,row:Row)
   def update()
   def remove()
-  def split()
+  def split():Page
   def isLeaf(page:Page):Boolean
 
 }

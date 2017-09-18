@@ -1,10 +1,13 @@
 package QueryEngine.parser
 
 import QueryEngine.logicPlan._
+import StoreEngine.`type`.{DataType, IntType, StringType}
+import StoreEngine.value.{IntValue, StringValue}
 import common.Catalog
 import org.antlr.v4.runtime.RuleContext
 import sqlParser.SqlLexerParser
-import sqlParser.SqlLexerParser.{OnesqlContext, DatatypeContext, IdentContext}
+import sqlParser.SqlLexerParser.{DatatypeContext, IdentContext, OnesqlContext}
+
 import collection.JavaConversions._
 
 /**
@@ -65,8 +68,18 @@ class sqlParserVisitor extends sqlParser.SqlLexerBaseVisitor[AnyRef] {
         a :+ (b.getText)
     }
     val iterator_dataType = ctx.datatype().toIterator
-    val dataTyleList = iterator_dataType.foldLeft(List[String]()) { (a, b) =>
-         a :+ (b.getText)
+    val dataTyleList = iterator_dataType.foldLeft(List[DataType]()) { (a, b) =>
+      val defineTypeStr=b.getText()
+      val defineType:DataType=defineTypeStr match {
+        case valueType if(valueType.equalsIgnoreCase("int"))=>{
+          IntType()
+        }
+        case valueType if(valueType.startsWith("varchar"))=>{
+          val varcharSize=valueType.substring(valueType.indexOf('(')+1,valueType.indexOf(')')).toInt  //将varchar的size更新到Row的size属性中
+          StringType(varcharSize)
+        }
+      }
+         a :+ defineType
     }
     val column = column_logic(columnList, dataTyleList,null)
     column

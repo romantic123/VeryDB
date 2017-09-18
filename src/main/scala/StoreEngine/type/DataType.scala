@@ -1,5 +1,6 @@
 package StoreEngine.`type`
 
 trait DataType {
-    def getType():Int
+    def getType():DataType
+    var size:Int
 }
