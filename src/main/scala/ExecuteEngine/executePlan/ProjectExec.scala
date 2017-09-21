@@ -1,15 +1,12 @@
 package ExecuteEngine.executePlan
 
-import QueryEngine.executePlan.executePlanTree
+import QueryEngine.executePlan.ExecutePlanTree
 import QueryEngine.logicPlan.select_logic
-import StoreEngine.table.CommonTable
-import StoreEngine.value.{IntValue, Value}
-import common.Catalog
 
 /**
   * Created by jianwei.yang on 2017/5/14.
   */
-case class projectExec(plan:select_logic,child:executePlanTree) extends executePlanTree{
+case class ProjectExec(plan: select_logic, child: ExecutePlanTree) extends ExecutePlanTree {
 
   override  def next[Row]():Iterator[StoreEngine.row.Row]={
     child.next()

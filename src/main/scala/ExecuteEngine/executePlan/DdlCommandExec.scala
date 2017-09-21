@@ -1,16 +1,15 @@
 package QueryEngine.executePlan
 
-import QueryEngine.logicPlan.{column_logic, logicPlanTree, table_logic}
+import QueryEngine.logicPlan.{column_logic, table_logic}
 import StoreEngine.`type`.DataType
 import StoreEngine.column.Column
-import StoreEngine.row.Row
 import StoreEngine.table.CommonTable
 import common.Catalog
 
 /**
   * Created by jianwei.yang on 2017/5/1.
   */
-case class DdlCommandExec(plan: table_logic, child:executePlanTree) extends executePlanTree {
+case class DdlCommandExec(plan: table_logic, child: ExecutePlanTree) extends ExecutePlanTree {
 
 
 

@@ -1,10 +1,9 @@
 package common
 
-import ExecuteEngine.executePlan.executeCommonUtils
+import ExecuteEngine.executePlan.ExecuteCommonUtils
 import StoreEngine.`type`.{DataType, IntType, StringType}
 import StoreEngine.column.Column
-import StoreEngine.table.{CommonTable, Table}
-import StoreEngine.value.{IntValue, StringValue}
+import StoreEngine.table.Table
 
 import scala.collection.mutable._
 
@@ -114,12 +113,12 @@ object Catalog {
   }
 
   def getTableColumn[T](table: String, column: String) = {
-    val getTable = executeCommonUtils.getTableFromCatalog(table)
+    val getTable = ExecuteCommonUtils.getTableFromCatalog(table)
     getTable.getColumn(column)
   }
 
   def getCoulumnIndex(table: String, column: Column): Int = {
-    val getTable = executeCommonUtils.getTableFromCatalog(table)
+    val getTable = ExecuteCommonUtils.getTableFromCatalog(table)
     getTable.allColumn.indexOf(column)
   }
 

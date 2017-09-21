@@ -53,7 +53,7 @@ LESS: '<';
 NEWLINE: '\r'? '\n';
 WS  : [ \t]+ -> skip;
 
-
+//fragment代表只能为词法服务,而不能为语法服务
 fragment A : [aA];
 fragment B : [bB];
 fragment C : [cC];

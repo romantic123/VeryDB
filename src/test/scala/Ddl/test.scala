@@ -17,7 +17,7 @@ object test{
        exec.start()
        exec.setSql("insert into test values(3,wei,92)")
        exec.start()
-       exec.setSql("select * from test where id >2")
+       exec.setSql("select * from test where id >0")
        exec.start()
      }
      val a =startTest()

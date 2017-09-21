@@ -51,6 +51,7 @@ class BtreeIndex  {
     Catalog.setRootNodeFilePos(tableName, rootFilePos)
   }
 
+
   /**
     *
     * -----------------------------------------------------------------------------------------------------------
@@ -108,8 +109,6 @@ class BtreeIndex  {
         updateRootNodeFilePos(tableName, 0)
       }
     }
-
-
   }
 
 

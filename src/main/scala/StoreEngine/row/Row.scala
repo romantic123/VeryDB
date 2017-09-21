@@ -1,8 +1,6 @@
 package StoreEngine.row
 
-import StoreEngine.`type`.{IntType, StringType}
 import StoreEngine.value.{IntValue, StringValue, Value}
-import common.Catalog
 
 /**
   * Created by jianwei.yang on 2017/4/22.
@@ -10,9 +8,6 @@ import common.Catalog
 class Row {
   var key: IntValue = null             //Btree cluster index's key
   var valueList: Seq[Value] = null
-
-
-
 
 
   def addRow(value: Seq[Value]): Row = {

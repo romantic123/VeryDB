@@ -1,7 +1,6 @@
 package QueryEngine.executePlan
 
 import ExecuteEngine.executePlan.DbExecuteTool
-import QueryEngine.logicPlan.logicPlanTree
 import QueryEngine.optimizerPlan.optimizerPlanTree
 import QueryEngine.parser.mySqlParser
 
@@ -21,8 +20,7 @@ class Exec {
    }
 
 
-
-   def getPhysicalPlan(sql:String): executePlanTree ={
+  def getPhysicalPlan(sql: String): ExecutePlanTree = {
        val logicPlan=mySqlParser().parserSql(testSql)
        val optimizerPlan=optimizerPlanTree().optimizerPlan(logicPlan)
        val physicalPlan=DbExecuteTool().ddlBatch(optimizerPlan)

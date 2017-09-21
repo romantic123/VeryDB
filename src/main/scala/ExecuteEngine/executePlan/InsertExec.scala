@@ -1,20 +1,18 @@
 package ExecuteEngine.executePlan
 
-import QueryEngine.executePlan.executePlanTree
-import QueryEngine.logicPlan.{column_logic, insert_logic, table_logic}
+import QueryEngine.executePlan.ExecutePlanTree
+import QueryEngine.logicPlan.insert_logic
 import StoreEngine.SEngine
-import StoreEngine.`type`.{DataType, StringType}
-import StoreEngine.column.Column
+import StoreEngine.`type`.DataType
 import StoreEngine.row.Row
 import StoreEngine.table.CommonTable
-import StoreEngine.value.{IntValue, StringValue, Value}
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.IntType
+import StoreEngine.value.{IntValue, StringValue}
 import common.Catalog
 
 /**
   * Created by jianwei.yang on 2017/5/1.
   */
-case class InsertExec(plan: insert_logic,child:executePlanTree) extends executePlanTree {
+case class InsertExec(plan: insert_logic, child: ExecutePlanTree) extends ExecutePlanTree {
 
 
   override  def next[Row]():Iterator[StoreEngine.row.Row]={

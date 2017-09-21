@@ -1,17 +1,15 @@
 package QueryEngine.executePlan
 
-import ExecuteEngine.executePlan.InsertExec
 import QueryEngine.Tree
-import QueryEngine.logicPlan._
-import StoreEngine.row.Row
 
 /**  * Created by jianwei.yang on 2017/4/30.
   */
-abstract  class executePlanTree extends Tree{
+abstract class ExecutePlanTree extends Tree {
 
 
   def next[Row]():Iterator[StoreEngine.row.Row]
-  override def child:executePlanTree //定义子树
+
+  override def child: ExecutePlanTree //定义子树
 
 
 
