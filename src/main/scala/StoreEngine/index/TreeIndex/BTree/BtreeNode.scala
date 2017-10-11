@@ -1,8 +1,7 @@
 package StoreEngine.index.TreeIndex.BTree
 
-import StoreEngine.index.page.{Page, PageReference}
+import StoreEngine.index.page.Page
 import StoreEngine.row.Row
-import StoreEngine.value.Value
 
 /**
   * Created by jianwei.yang on 2017/6/5.
@@ -34,10 +33,10 @@ class BtreeNode extends Btree {
     * @param gonnaInsertPageRef                      
     * @return
     */
-  def insert(gonnaInsertKey:Int,gonnaInsertPageRef:PageReference): Option[Page] = {
+  def insert(gonnaInsertKey: Int, gonnaInsertPageRef: Int): Option[Page] = {
     //当前节点的keys和values
     val currentNodeKeys: Seq[Int] = storePage.keys
-    val currentNodeValues: Seq[PageReference] = storePage.childs
+    val currentNodeValues: Seq[Int] = storePage.childs
 
     //待插入的key和index
     val insertIndex = binary_serach(gonnaInsertKey, currentNodeKeys)
@@ -47,12 +46,12 @@ class BtreeNode extends Btree {
     val rightKeys = currentNodeKeys.takeRight(insertIndex)
 
     //以index为边界,将index的左右key分别存储到两个不同的临时数组中
-    val leftPageReference: Seq[PageReference] = currentNodeValues.take(insertIndex)
-    val rightPageReference: Seq[PageReference] = currentNodeValues.takeRight(insertIndex)
+    val leftPageReference: Seq[Int] = currentNodeValues.take(insertIndex)
+    val rightPageReference: Seq[Int] = currentNodeValues.takeRight(insertIndex)
 
     //将待插入的key和value插入到临时数组中,组成新节点的key和value
     val newCurrentNodeKeys: Seq[Int] = (leftKeys :+ gonnaInsertKey) ++ rightKeys
-    val newCurrentNodeValues: Seq[PageReference] = (leftPageReference :+ gonnaInsertPageRef) ++ rightPageReference
+    val newCurrentNodeValues: Seq[Int] = (leftPageReference :+ gonnaInsertPageRef) ++ rightPageReference
 
     //插入完之后,判断是否需要分裂
     if (getSize(newCurrentNodeKeys, newCurrentNodeValues) > Page.pageSize) {
@@ -71,7 +70,7 @@ class BtreeNode extends Btree {
       * @param pageRef
       * @return
       */
-  def getSize(keys: Seq[Int], pageRef: Seq[PageReference]): Int = {
+    def getSize(keys: Seq[Int], pageRef: Seq[Int]): Int = {
     val size = keys.size * 4 + pageRef.size * 4 + Page.PageHeadSize
     size
   }
@@ -81,7 +80,7 @@ class BtreeNode extends Btree {
     val gonnaInsertKey=row.key.get()
     //当前节点的keys和values
     val currentNodeKeys: Seq[Int] = storePage.keys
-    val currentNodeValues: Seq[PageReference] = storePage.childs
+    val currentNodeValues: Seq[Int] = storePage.childs
     //待插入的key和index
     val insertIndex = binary_serach(gonnaInsertKey, currentNodeKeys)
     insertIndex

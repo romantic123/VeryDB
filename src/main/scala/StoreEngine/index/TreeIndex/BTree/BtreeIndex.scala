@@ -43,6 +43,7 @@ class BtreeIndex  {
     }
   }
 
+
   /**
     *
     */
@@ -73,27 +74,21 @@ class BtreeIndex  {
     val startPos = 0
     val data1 = ByteBuffer.allocate(4096)
     val data2 = ByteBuffer.allocate(4096)
-
     data1.putInt(0)
     data1.putInt(0)
     data1.putInt(row.key.get)
     DataUtils.writeRow(tableName, data2, row)
-
     val keyAndValueSize = 4 + Catalog.getRowSize(tableName)
     val number = 4096 / keyAndValueSize
-
     val valueStart = 4096 - 8 - number * 4 + startPos
-
-
     //写入pageType,keysSize,keys
     fileDisk.write(startPos, data1)
-
     //写入values,需要计算从page中哪个位置写
     fileDisk.write(valueStart, data2)
   }
 
-  def insert(tableName:String,row: Row):Unit={
 
+  def insert(tableName:String,row: Row):Unit={
     val fileDisk = new fileDisk()
     val data = ByteBuffer.allocate(4096)
     var rootNodePage: Int = 0
@@ -111,22 +106,13 @@ class BtreeIndex  {
     }
   }
 
-
   /**
     *1.fileDisk从root page file pos读取4096字节数据
     *2.判断page类型是node还是leaf
     *3.如果是node,判断child,向下走
     *4.如果是leaf,获取文件中存的值
     **/
-  /**
-    *
-    * @param tableName
-    * @param row
-    * @param page
-    */
   def insert(tableName: String, row: Row, page:Page): Unit = {
-
-
 //step1:判断是不是叶子节点
     if (page.pageType==0) {
       //如果是叶子节点,就代表没有子节点了,则返回
@@ -136,7 +122,7 @@ class BtreeIndex  {
       val btreeNode:BtreeNode=BtreeNode(page)
       val insertIndex=btreeNode.searchInsertPage(row)
       val childPageRef=btreeNode.storePage.childs(insertIndex)
-      val childPos=childPageRef.pageId*4096+childPageRef.pos
+      val childPos = page.pageId * 4096 + childPageRef
       val childPage=getPage(tableName,childPos)
       //如果是叶子节点
       if(childPage.pageType==0){
@@ -166,7 +152,55 @@ class BtreeIndex  {
 
   }
 
+  /**
+    * 先得到rootPage节点,然后根据rootPage进行递归遍历,最后返回叶子节点page
+    *
+    * @param tableName
+    * @param serachId
+    * @return
+    */
+  def read(tableName: String, serachId: Int): Page = {
+    var rootNodePage: Int = 0
+    getRootNodeFilePos(tableName) match {
+      //不是第一次插入
+      case Some(rootPagePos) => {
+        rootNodePage = rootPagePos
+        val rootPage = getPage(tableName, rootNodePage)
+        getLeafPage(tableName, rootPage, serachId)
+      } //第一次插入
+      case None => {
+        throw new Exception("该表无数据!")
+      }
+    }
+  }
 
+  /**
+    * 遍历索引,得到叶子节点
+    *
+    * @param tableName
+    * @param page
+    * @param serachId
+    * @return
+    */
+  def getLeafPage(tableName: String, page: Page, serachId: Int): Page = {
+    if (page.keys.contains(serachId)) {
+      if (page.pageType == 0) {
+        val pageFilePos = page.childs(page.keys.indexOf(serachId))
+        val childPage = getPage(tableName, pageFilePos)
+        getLeafPage(tableName, childPage, serachId)
+      } else {
+        return page
+      }
+    }
+    return null
+  }
+
+
+  /**
+    * @param tableName
+    * @param filePos
+    * @return
+    */
   def getPage(tableName:String,filePos:Int):Page={
     val data = ByteBuffer.allocate(4096)
     //该page在文件中的绝对索引位置
@@ -183,10 +217,12 @@ class BtreeIndex  {
     }
     val childsPos: Array[Int] = new Array[Int](keysSize)
     val rows: Array[Row] = new Array[Row](keysSize)
+    var page: Page=null
     if (pageType == 1) {
       for (i <- 0 until keysSize) {
         childsPos(i) = data.getInt()
       }
+      page = new Page(pageType, keysSize, keys, null, childsPos)
     } else if (pageType == 0) {
       //读取整行数据
       for (i <- 0 until keysSize) {
@@ -206,16 +242,10 @@ class BtreeIndex  {
         val pageRow=Row(values)
         rows(i)=pageRow
       }
+      page = new Page(pageType, keysSize, keys, rows,null)
     }
-
-    val page:Page=new Page(pageType,keysSize,keys,rows,null)
     page
-
   }
-
-
-
-
 
 
   def judgeSplit(row: Row): Boolean = {
@@ -244,10 +274,12 @@ class BtreeIndex  {
     page
   }
 
-
   def delete(): Unit = {
 
   }
 
+}
 
+object BtreeIndex {
+  def apply() = new BtreeIndex()
 }

@@ -1,18 +1,18 @@
 package StoreEngine.index.page
 
 import StoreEngine.row.Row
-import StoreEngine.value.Value
 
 /**
   * Created by jianwei.yang on 2017/6/5.
   */
 class Page{
   //0是叶子节点,1是非叶子节点
+  var pageId: Int = 0
   var pageType:Int=0
   var keysSize:Int=0
   var keys:Seq[Int]=null
   var values:Seq[Row]=null
-  var childs:Seq[PageReference]=null
+  var childs: Seq[Int] = null
 
   val everyPageSize=4096
 
@@ -32,7 +32,7 @@ class Page{
     this.keys=keys
   }
 
-  def this(pageType:Int,pageLen:Int,keys:Seq[Int],values:Seq[Row],childs:Seq[PageReference]){
+  def this(pageType: Int, pageLen: Int, keys: Seq[Int], values: Seq[Row], childs: Seq[Int]) {
     this(pageType,pageLen,keys)
     this.values=values
     this.childs=childs
