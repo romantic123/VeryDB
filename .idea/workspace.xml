@@ -6,11 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ff911cfc-bbaf-49e0-9fde-70c9cebf8aa0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/JwDb.iml" afterPath="$PROJECT_DIR$/JwDb.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/ExecuteEngine/executePlan/FilterExec.scala" afterPath="$PROJECT_DIR$/src/main/scala/ExecuteEngine/executePlan/FilterExec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/ExecuteEngine/executePlan/ScanExec.scala" afterPath="$PROJECT_DIR$/src/main/scala/ExecuteEngine/executePlan/ScanExec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/StoreEngine/index/TreeIndex/BTree/BtreeIndex.scala" afterPath="$PROJECT_DIR$/src/main/scala/StoreEngine/index/TreeIndex/BTree/BtreeIndex.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/common/Catalog.scala" afterPath="$PROJECT_DIR$/src/main/scala/common/Catalog.scala" />
     </list>
     <ignored path="VeryDb.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -46,8 +41,8 @@
       <file leaf-file-name="scan_logic.scala" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/scala/QueryEngine/logicPlan/scan_logic.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="192">
-              <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+            <state relative-caret-position="96">
+              <caret line="4" column="4" lean-forward="true" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="4" />
               <folding />
             </state>
           </provider>
@@ -549,8 +544,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
-    <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="settings.github" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="project.structure.last.edited" value="Global Libraries" />
@@ -1276,7 +1270,7 @@
       <workItem from="1507809700482" duration="60000" />
       <workItem from="1508223864531" duration="2157000" />
       <workItem from="1508305384836" duration="2000" />
-      <workItem from="1508326184064" duration="488000" />
+      <workItem from="1508326184064" duration="701000" />
     </task>
     <task id="LOCAL-00001" summary="test">
       <created>1492578287132</created>
@@ -1383,11 +1377,18 @@
       <option name="project" value="LOCAL" />
       <updated>1508326230099</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="some btree update">
+      <created>1508326719758</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1508326719758</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1078484000" />
+    <option name="totallyTimeSpent" value="1078697000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1894,8 +1895,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/QueryEngine/logicPlan/scan_logic.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+        <state relative-caret-position="96">
+          <caret line="4" column="4" lean-forward="true" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="4" />
           <folding />
         </state>
       </provider>
