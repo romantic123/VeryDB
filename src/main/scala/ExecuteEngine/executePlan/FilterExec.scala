@@ -2,8 +2,10 @@ package ExecuteEngine.executePlan
 
 import QueryEngine.executePlan.ExecutePlanTree
 import QueryEngine.logicPlan.filter_logic
+import StoreEngine.index.IndexCursor
 import StoreEngine.row.Row
 import StoreEngine.value.{IntValue, StringValue, Value}
+import common.Catalog
 
 /**
   * Created by jianwei.yang on 2017/6/24.
@@ -16,9 +18,17 @@ case class FilterExec(plan: filter_logic, child: ExecutePlanTree) extends Execut
     data
   }
 
+  def getIndexCursorSeq(): Unit = {
+    Catalog.clusterIndexColumn.get(plan.tableName)
+    new IndexCursor()
+    plan.column
+  }
 
   override def execute(): Unit = {
     super.execute()
+    if (child.isInstanceOf[ScanExec]) {
+      child.asInstanceOf[ScanExec].indexCursor
+    }
     data = child.next()
     val filterIndex = plan.filterColumn()
 

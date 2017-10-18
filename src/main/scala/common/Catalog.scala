@@ -22,9 +22,10 @@ object Catalog {
   val columnMap: Map[String, Column] = Map()
   //rootNodeFilePos中key是表名,value是Btree中root page的pos
   var rootNodeFilePos: Map[String, Int] = Map()
-
+  //tableMapValueType中,key是表名,value是列的类型
   val tableMapValueType: scala.collection.mutable.Map[String, scala.collection.mutable.ArrayBuffer[DataType]] = scala.collection.mutable.Map()
-
+  //clusterIndexColumn中,key是表名,value是聚簇的列
+  val clusterIndexColumn: Map[String, Column] = Map()
 
   def getTableMapValueType(tableName: String): Option[ArrayBuffer[DataType]] = {
     tableMapValueType.get(tableName)

@@ -10,8 +10,9 @@ import common.Catalog
 /**
   * Created by jianwei.yang on 2017/6/26.
   */
-case class ScanExec(indexCursor: Seq[IndexCursor], needScanTable: CommonTable, child: ExecutePlanTree) extends ExecutePlanTree {
+case class ScanExec(needScanTable: CommonTable, child: ExecutePlanTree) extends ExecutePlanTree {
 
+  var indexCursor: Seq[IndexCursor] = null
   var tableData: Iterator[Row] = null
 
   override def next[Row](): Iterator[StoreEngine.row.Row] = tableData
@@ -28,7 +29,6 @@ case class ScanExec(indexCursor: Seq[IndexCursor], needScanTable: CommonTable, c
         BtreeIndex().read(tableName, j)
       }
     }
-
   }
 
 
