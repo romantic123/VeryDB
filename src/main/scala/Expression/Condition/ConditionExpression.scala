@@ -1,7 +1,7 @@
 package Expression
 
 class ConditionExpression {
-  val conditionType =
+  val conditionType =null
   var conditionLeaf = null
   var conditionRight = null
 
