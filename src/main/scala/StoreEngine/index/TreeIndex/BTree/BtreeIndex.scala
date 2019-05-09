@@ -21,6 +21,7 @@ class BtreeIndex  {
   val values: ArrayBuffer[Value] = null
   val childs: ArrayBuffer[Btree] = null
   val storePage = root
+  val ddd = null
 
 
   val rootNode: Btree = null
