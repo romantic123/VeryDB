@@ -19,6 +19,8 @@ case class ScanExec(needScanTable: CommonTable, child: ExecutePlanTree) extends 
 
   override def execute(): Unit = {
     val tableName = needScanTable.tableName
+    val columnName: String = null
+
     val table = Catalog.getTable(tableName) match {
       case None => throw new Exception("表不存在")
       case Some(table) => table.asInstanceOf[CommonTable]
